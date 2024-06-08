@@ -1,0 +1,142 @@
+﻿<!-- Create Modal -->
+<div class="modal fade" id="addComponentModal" tabindex="-1" role="dialog" aria-labelledby="addComponentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addComponentModalLabel">Add New Component</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addComponentForm">
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" id="Name" name="Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Type">Type</label>
+                        <select class="form-control" id="Type" name="Type" required>
+                            <option value="CPU">CPU</option>
+                            <option value="GPU">GPU</option>
+                            <option value="RAM">RAM</option>
+                            <option value="SSD">SSD</option>
+                            <option value="PSU">PSU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="Manufacturer">Manufacturer</label>
+                        <input type="text" class="form-control" id="Manufacturer" name="Manufacturer" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Price">Price</label>
+                        <input type="number" step="0.01" class="form-control" id="Price" name="Price" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="ImageSource">Image Source</label><br />
+                        <input type="radio" id="uploadOption" name="ImageSource" value="upload" checked />
+                        <label for="uploadOption">Upload File</label><br />
+                        <input type="radio" id="urlOption" name="ImageSource" value="url" />
+                        <label for="urlOption">Image URL</label>
+                    </div>
+                    <div class="form-group" id="imageFileGroup">
+                        <label for="ImagePath">Image</label>
+                        <input type="file" class="form-control" id="ImagePath" name="ImagePath" />
+                    </div>
+                    <div class="form-group" id="imageUrlGroup" style="display: none;">
+                        <label for="ImageUrl">Image URL</label>
+                        <input type="url" class="form-control" id="ImageUrl" name="ImageUrl" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveComponentButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editComponentModal" tabindex="-1" role="dialog" aria-labelledby="editComponentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editComponentModalLabel">Edit Component</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editComponentForm">
+                    <input type="hidden" id="editComponentID" name="ComponentID" />
+                    <div class="form-group">
+                        <label for="EditName">Name</label>
+                        <input type="text" class="form-control" id="EditName" name="Name" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditType">Type</label>
+                        <select class="form-control" id="EditType" name="Type" required>
+                            <option value="CPU">CPU</option>
+                            <option value="GPU">GPU</option>
+                            <option value="RAM">RAM</option>
+                            <option value="SSD">SSD</option>
+                            <option value="PSU">PSU</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="EditManufacturer">Manufacturer</label>
+                        <input type="text" class="form-control" id="EditManufacturer" name="Manufacturer" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditPrice">Price</label>
+                        <input type="number" step="0.01" class="form-control" id="EditPrice" name="Price" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="EditImageSource">Image Source</label><br />
+                        <input type="radio" id="editUploadOption" name="EditImageSource" value="upload" checked />
+                        <label for="editUploadOption">Upload File</label><br />
+                        <input type="radio" id="editUrlOption" name="EditImageSource" value="url" />
+                        <label for="editUrlOption">Image URL</label>
+                    </div>
+                    <div class="form-group" id="editImageFileGroup">
+                        <label for="EditImagePath">Image</label>
+                        <input type="file" class="form-control" id="EditImagePath" name="ImagePath" />
+                    </div>
+                    <div class="form-group" id="editImageUrlGroup" style="display: none;">
+                        <label for="EditImageUrl">Image URL</label>
+                        <input type="url" class="form-control" id="EditImageUrl" name="ImageUrl" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateComponentButton">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteComponentModal" tabindex="-1" role="dialog" aria-labelledby="deleteComponentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteComponentModalLabel">Delete Component</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteComponentMessage"></strong>?</p>
+                <form id="deleteComponentForm">
+                    <input type="hidden" id="deleteComponentID" name="ComponentID" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>

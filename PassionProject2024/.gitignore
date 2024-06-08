@@ -1,0 +1,6 @@
+.vs/
+bin/
+obj/
+App_Data/*.mdf
+PassionProject2024/App_Data/*.mdf
+PassionProject2024/App_Data/*.ldf

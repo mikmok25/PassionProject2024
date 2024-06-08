@@ -1,0 +1,183 @@
+﻿@model IEnumerable<PassionProject2024.Models.ComponentDto>
+
+@{
+    ViewBag.Title = "Components List";
+}
+
+<h2>Components List</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr class="text-center align-middle">
+            <th>Name</th>
+            <th>Type</th>
+            <th>Manufacturer</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center align-middle">
+                <td class="text-center align-middle">@item.Name</td>
+                <td class="text-center align-middle">@item.Type</td>
+                <td class="text-center align-middle">@item.Manufacturer</td>
+                <td class="text-center align-middle">$@item.Price</td>
+                <td>
+                    <img src="@(item.ImagePath != null ? Url.Content(item.ImagePath) : "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg")" alt="@item.Name Image" style="max-width: 100px;" />
+                </td>
+                <td class="text-center align-middle">
+                    @Html.ActionLink("View", "Details", new { id = item.ComponentID }, new { @class = "btn btn-success" })
+                    <button type="button" class="btn btn-primary edit-button" data-id="@item.ComponentID">Edit</button>
+                    <button type="button" class="btn btn-danger delete-button" data-id="@item.ComponentID" data-name="@item.Name" data-manufacturer="@item.Manufacturer">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addComponentModal">
+    Create New
+</button>
+
+@Html.Partial("_Modals")
+
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('input[name="ImageSource"]').change(function () {
+                if (this.value == 'upload') {
+                    $('#imageFileGroup').show();
+                    $('#imageUrlGroup').hide();
+                } else {
+                    $('#imageFileGroup').hide();
+                    $('#imageUrlGroup').show();
+                }
+            });
+
+            $('input[name="EditImageSource"]').change(function () {
+                if (this.value == 'upload') {
+                    $('#editImageFileGroup').show();
+                    $('#editImageUrlGroup').hide();
+                } else {
+                    $('#editImageFileGroup').hide();
+                    $('#editImageUrlGroup').show();
+                }
+            });
+
+            $('#saveComponentButton').click(function () {
+                var form = $('#addComponentForm')[0];
+                var formData = new FormData(form);
+
+                $.ajax({
+                    url: '@Url.Action("Create", "Component")',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload(); // Reload the page to see the new component
+                        } else {
+                            alert('An error occurred while adding the component.');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+
+            $('.edit-button').click(function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '@Url.Action("Edit", "Component")/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#editComponentID').val(data.ComponentID);
+                        $('#EditName').val(data.Name);
+                        $('#EditType').val(data.Type);
+                        $('#EditManufacturer').val(data.Manufacturer);
+                        $('#EditPrice').val(data.Price);
+                        if (data.ImagePath) {
+                            $('#editUploadOption').prop('checked', true);
+                            $('#editImageFileGroup').show();
+                            $('#editImageUrlGroup').hide();
+                        } else {
+                            $('#editUrlOption').prop('checked', true);
+                            $('#editImageFileGroup').hide();
+                            $('#editImageUrlGroup').show();
+                        }
+                        $('#editComponentModal').modal('show');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+
+            $('#updateComponentButton').click(function () {
+                var form = $('#editComponentForm')[0];
+                var formData = new FormData(form);
+                var id = $('#editComponentID').val();
+
+                $.ajax({
+                    url: '@Url.Action("Update", "Component")/' + id,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#editComponentModal').modal('hide'); // Close the modal
+                            location.reload(); // Reload the page to see the updated component
+                        } else {
+                            alert('An error occurred while updating the component.');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+
+            $('.delete-button').click(function () {
+                var id = $(this).data('id');
+                var name = $(this).data('name');
+                var manufacturer = $(this).data('manufacturer')
+                $('#deleteComponentID').val(id);
+                $('#deleteComponentMessage').text(`${manufacturer} ${name}`);
+                $('#deleteComponentModal').modal('show');
+            });
+
+            $('#confirmDeleteButton').click(function () {
+                var form = $('#deleteComponentForm')[0];
+                var formData = new FormData(form);
+                var id = $('#deleteComponentID').val();
+
+                $.ajax({
+                    url: '@Url.Action("DeleteConfirmed", "Component")/' + id,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#deleteComponentModal').modal('hide'); // Close the modal
+                            location.reload(); // Reload the page to see the updated component list
+                        } else {
+                            alert('An error occurred while deleting the component.');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+        });
+    </script>
+}
+

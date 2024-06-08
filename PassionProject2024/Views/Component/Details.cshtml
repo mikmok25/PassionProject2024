@@ -1,0 +1,24 @@
+﻿@model PassionProject2024.Models.ComponentDto
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3>@Model.Name</h3>
+    </div>
+    <div class="card-body">
+        <img src="@Url.Content(Model.ImagePath)" alt="@Model.Name Image" class="img-fluid" style="max-width: 300px;" />
+        <p>Type: @Model.Type</p>
+        <p>Manufacturer: @Model.Manufacturer</p>
+        <p>Price: $@Model.Price</p>
+    </div>
+    <div class="card-footer">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ComponentID }, new { @class = "btn btn-primary" }) |
+        @Html.ActionLink("Back to List", "List", null, new { @class = "btn btn-secondary" }) |
+        @Html.ActionLink("Delete", "Delete", new { id = Model.ComponentID }, new { @class = "btn btn-danger" })
+    </div>
+</div>
