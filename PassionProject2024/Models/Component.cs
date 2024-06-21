@@ -11,12 +11,13 @@ namespace PassionProject2024.Models
     {
         [Key]
         public int ComponentID { get; set; }
-        public string Name { get; set; }
-        public string Type { get; set; } // e.g., CPU, GPU, RAM
-        public string Manufacturer { get; set; }
+        public string Name { get; set; } // Name of the component, e.g., "Intel i7 CPU"
+        public string Type { get; set; } // Type of the component, e.g., "CPU", "GPU", "RAM"
         public decimal Price { get; set; }
+        public string Manufacturer { get; set; }
 
-        public string ImagePath { get; set; }
+        public string ImagePath { get; set; } // Path to the image file or URL of the component's image
+
     }
 
     public class ComponentDto

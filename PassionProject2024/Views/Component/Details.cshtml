@@ -11,7 +11,7 @@
         <h3>@Model.Name</h3>
     </div>
     <div class="card-body">
-        <img src="@Url.Content(Model.ImagePath)" alt="@Model.Name Image" class="img-fluid" style="max-width: 300px;" />
+        <img src="@(Model.ImagePath != null ? Url.Content(Model.ImagePath) : "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg")" alt="@Model.Name Image" class="img-fluid" style="max-width: 300px;" />
         <p>Type: @Model.Type</p>
         <p>Manufacturer: @Model.Manufacturer</p>
         <p>Price: $@Model.Price</p>

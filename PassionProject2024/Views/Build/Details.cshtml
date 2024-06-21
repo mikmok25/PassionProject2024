@@ -1,0 +1,218 @@
+﻿@model PassionProject2024.Models.BuildDto
+
+@{
+    ViewBag.Title = "Build Details";
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.BuildName</h3>
+    </div>
+    <div class="panel-body">
+        <p><strong>Description:</strong> @Model.BuildDescription</p>
+        <h4>Components</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Manufacturer</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var component in Model.Components)
+                {
+                    <tr>
+                        <td>@component.Name</td>
+                        <td>@component.Type</td>
+                        <td>@component.Manufacturer</td>
+                        <td>$@component.Price</td>
+                        <td>
+                            <img src="@(component.ImagePath != null ? Url.Content(component.ImagePath) : "https://ralfvanveen.com/wp-content/uploads/2021/06/Placeholder-_-Glossary.svg")" alt="@component.Name Image" style="max-width: 100px;" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h4>Total Price: $@(Model.Components.Sum(c => c.Price))</h4>
+    </div>
+</div>
+
+<a href="/Build/List" button" class="btn btn-primary edit-button">Back to list</a>
+<button type="button" class="btn btn-success edit-button" data-id="@Model.BuildID" data-toggle="modal" data-target="#editBuildModal">Edit</button>
+<button type="button" class="btn btn-danger delete-button" data-id="@Model.BuildID" data-toggle="modal" data-target="#deleteBuildModal">Delete</button>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editBuildModal" tabindex="-1" role="dialog" aria-labelledby="editBuildModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editBuildModalLabel">Edit Build</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editBuildForm">
+                    <input type="hidden" id="editBuildID" name="BuildID" value="@Model.BuildID" />
+                    <div class="form-group">
+                        <label for="editBuildName">Name</label>
+                        <input type="text" class="form-control" id="editBuildName" name="BuildName" value="@Model.BuildName" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="editBuildDescription">Description</label>
+                        <textarea class="form-control" id="editBuildDescription" name="BuildDescription" required>@Model.BuildDescription</textarea>
+                    </div>
+
+                    <h3>Components</h3>
+                    <div class="form-group">
+                        <label for="editCpuDropdown">CPU</label>
+                        <select id="editCpuDropdown" name="componentIds" class="form-control component-dropdown">
+                            <option value="">Select CPU</option>
+                            @foreach (var component in ViewBag.CPUs)
+                            {
+                                <option value="@component.ComponentID" data-price="@component.Price" @(Model.Components.Any(c => c.ComponentID == component.ComponentID) ? "selected" : "")>@component.Name - $@component.Price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editGpuDropdown">GPU</label>
+                        <select id="editGpuDropdown" name="componentIds" class="form-control component-dropdown">
+                            <option value="">Select GPU</option>
+                            @foreach (var component in ViewBag.GPUs)
+                            {
+                                <option value="@component.ComponentID" data-price="@component.Price" @(Model.Components.Any(c => c.ComponentID == component.ComponentID) ? "selected" : "")>@component.Name - $@component.Price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editRamDropdown">RAM</label>
+                        <select id="editRamDropdown" name="componentIds" class="form-control component-dropdown">
+                            <option value="">Select RAM</option>
+                            @foreach (var component in ViewBag.RAMs)
+                            {
+                                <option value="@component.ComponentID" data-price="@component.Price" @(Model.Components.Any(c => c.ComponentID == component.ComponentID) ? "selected" : "")>@component.Name - $@component.Price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editSsdDropdown">SSD</label>
+                        <select id="editSsdDropdown" name="componentIds" class="form-control component-dropdown">
+                            <option value="">Select SSD</option>
+                            @foreach (var component in ViewBag.SSDs)
+                            {
+                                <option value="@component.ComponentID" data-price="@component.Price" @(Model.Components.Any(c => c.ComponentID == component.ComponentID) ? "selected" : "")>@component.Name - $@component.Price</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPsuDropdown">PSU</label>
+                        <select id="editPsuDropdown" name="componentIds" class="form-control component-dropdown">
+                            <option value="">Select PSU</option>
+                            @foreach (var component in ViewBag.PSUs)
+                            {
+                                <option value="@component.ComponentID" data-price="@component.Price" @(Model.Components.Any(c => c.ComponentID == component.ComponentID) ? "selected" : "")>@component.Name - $@component.Price</option>
+                            }
+                        </select>
+                    </div>
+
+                    <h3>Total Price: $<span id="editTotalPrice">0.00</span></h3>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updateBuildButton">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteBuildModal" tabindex="-1" role="dialog" aria-labelledby="deleteBuildModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteBuildModalLabel">Delete Build</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this build?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBuildButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.component-dropdown').change(function () {
+                var totalPrice = 0.00;
+                $('.component-dropdown').each(function () {
+                    var selectedOption = $(this).find('option:selected');
+                    var price = parseFloat(selectedOption.data('price')) || 0;
+                    totalPrice += price;
+                });
+                $('#editTotalPrice').text(totalPrice.toFixed(2));
+            });
+
+            $('#updateBuildButton').click(function () {
+                var form = $('#editBuildForm')[0];
+                var formData = new FormData(form);
+
+                $.ajax({
+                    url: '@Url.Action("Update", "Build")/' + $('#editBuildID').val(),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            location.reload(); // Reload the page to see the updated build
+                        } else {
+                            alert('An error occurred while updating the build.');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+
+            $('.delete-button').click(function () {
+                var buildId = $(this).data('id');
+                $('#confirmDeleteBuildButton').data('id', buildId);
+            });
+
+            $('#confirmDeleteBuildButton').click(function () {
+                var buildId = $(this).data('id');
+
+                $.ajax({
+                    url: '@Url.Action("Delete", "Build")/' + buildId,
+                    type: 'POST',
+                    success: function (response) {
+                        if (response.success) {
+                            window.location.href = '@Url.Action("List", "Build")'; // Redirect to Build List page
+                        } else {
+                            alert('An error occurred while deleting the build.');
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('An error occurred: ' + textStatus);
+                    }
+                });
+            });
+
+            // Trigger change event to calculate the initial total price
+            $('.component-dropdown').trigger('change');
+        });
+    </script>
+}

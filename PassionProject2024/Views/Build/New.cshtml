@@ -1,0 +1,93 @@
+﻿@model PassionProject2024.Models.BuildDto
+
+@{
+    ViewBag.Title = "New Build";
+}
+
+<h2>New Build</h2>
+
+@using (Html.BeginForm("Create", "Build", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.BuildName)
+        @Html.TextBoxFor(model => model.BuildName, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BuildDescription)
+        @Html.TextAreaFor(model => model.BuildDescription, new { @class = "form-control" })
+    </div>
+
+    <h3>Components</h3>
+    <div class="form-group">
+        <label for="cpuDropdown">CPU</label>
+        <select id="cpuDropdown" name="componentIds" class="form-control component-dropdown">
+            <option value="">Select CPU</option>
+            @foreach (var component in ViewBag.CPUs)
+            {
+                <option value="@component.ComponentID" data-price="@component.Price">@component.Name - $@component.Price</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="gpuDropdown">GPU</label>
+        <select id="gpuDropdown" name="componentIds" class="form-control component-dropdown">
+            <option value="">Select GPU</option>
+            @foreach (var component in ViewBag.GPUs)
+            {
+                <option value="@component.ComponentID" data-price="@component.Price">@component.Name - $@component.Price</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ramDropdown">RAM</label>
+        <select id="ramDropdown" name="componentIds" class="form-control component-dropdown">
+            <option value="">Select RAM</option>
+            @foreach (var component in ViewBag.RAMs)
+            {
+                <option value="@component.ComponentID" data-price="@component.Price">@component.Name - $@component.Price</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="ssdDropdown">SSD</label>
+        <select id="ssdDropdown" name="componentIds" class="form-control component-dropdown">
+            <option value="">Select SSD</option>
+            @foreach (var component in ViewBag.SSDs)
+            {
+                <option value="@component.ComponentID" data-price="@component.Price">@component.Name - $@component.Price</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="psuDropdown">PSU</label>
+        <select id="psuDropdown" name="componentIds" class="form-control component-dropdown">
+            <option value="">Select PSU</option>
+            @foreach (var component in ViewBag.PSUs)
+            {
+                <option value="@component.ComponentID" data-price="@component.Price">@component.Name - $@component.Price</option>
+            }
+        </select>
+    </div>
+
+    <h3>Total Price: $<span id="totalPrice">0.00</span></h3>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+}
+
+@Html.ActionLink("Back to List", "List", null, new { @class = "btn btn-secondary" })
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.component-dropdown').change(function () {
+                var totalPrice = 0.00;
+                $('.component-dropdown').each(function () {
+                    var selectedOption = $(this).find('option:selected');
+                    var price = parseFloat(selectedOption.data('price')) || 0;
+                    totalPrice += price;
+                });
+                $('#totalPrice').text(totalPrice.toFixed(2));
+            });
+        });
+    </script>
+}

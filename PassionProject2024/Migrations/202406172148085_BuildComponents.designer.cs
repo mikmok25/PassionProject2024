@@ -7,13 +7,13 @@ namespace PassionProject2024.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class component : IMigrationMetadata
+    public sealed partial class BuildComponent : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(component));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(BuildComponent));
         
         string IMigrationMetadata.Id
         {
-            get { return "202406081807458_component"; }
+            get { return "202406172148085_BuildComponent"; }
         }
         
         string IMigrationMetadata.Source

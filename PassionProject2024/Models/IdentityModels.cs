@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -19,6 +20,7 @@ namespace PassionProject2024.Models
             // Add custom user claims here
             return userIdentity;
         }
+
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -28,15 +30,10 @@ namespace PassionProject2024.Models
         {
         }
         //represent the gateway between our c# application and database
-        public DbSet<ExerciseEquipment> ExerciseEquipments { get; set; }
-        public DbSet<Category> Categories { get; set; }
-
-        public DbSet<Gym> Gyms { get; set; }
 
         public DbSet<Component> Components { get; set; }
-
-
-
+        public DbSet<Build> Builds { get; set; }
+        public DbSet<BuildComponent> BuildComponents { get; set; }
 
 
 
