@@ -15,7 +15,16 @@ namespace PassionProject2024.Controllers
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: api/ComponentData/ListComponents
+        /// <summary>
+        /// Returns all components in the system.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: all components in the database.
+        /// </returns>
+        /// <example>
+        /// GET: api/ComponentData/ListComponents
+        /// </example>
         [HttpGet]
         public IEnumerable<ComponentDto> ListComponents()
         {
@@ -35,7 +44,19 @@ namespace PassionProject2024.Controllers
             return ComponentDtos;
         }
 
-        // GET: api/ComponentData/FindComponent/5
+        /// <summary>
+        /// Returns a specific component by ID.
+        /// </summary>
+        /// <param name="id">The primary key of the component</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: A component in the system matching the component ID
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// GET: api/ComponentData/FindComponent/5
+        /// </example>
         [ResponseType(typeof(ComponentDto))]
         [HttpGet]
         [Route("api/componentdata/findcomponent/{id}")]
@@ -60,7 +81,20 @@ namespace PassionProject2024.Controllers
             return Ok(ComponentDto);
         }
 
-        // POST: api/ComponentData/AddComponent
+        /// <summary>
+        /// Adds a new component to the system.
+        /// </summary>
+        /// <param name="component">JSON FORM DATA of a component</param>
+        /// <returns>
+        /// HEADER: 201 (Created)
+        /// CONTENT: Component ID, Component Data
+        /// or
+        /// HEADER: 400 (Bad Request)
+        /// </returns>
+        /// <example>
+        /// POST: api/ComponentData/AddComponent
+        /// FORM DATA: Component JSON Object
+        /// </example>
         [ResponseType(typeof(Component))]
         [HttpPost]
         public IHttpActionResult AddComponent(Component component)
@@ -76,7 +110,23 @@ namespace PassionProject2024.Controllers
             return Ok();
         }
 
-        // POST: api/ComponentData/UpdateComponent/5
+        /// <summary>
+        /// Updates a particular component in the system with POST Data input.
+        /// </summary>
+        /// <param name="id">Represents the Component ID primary key</param>
+        /// <param name="component">JSON FORM DATA of a component</param>
+        /// <returns>
+        /// HEADER: 204 (Success, No Content Response)
+        /// or
+        /// HEADER: 400 (Bad Request)
+        /// or
+        /// HEADER: 404 (Not Found)
+        /// </returns>
+        /// <example>
+        /// POST: api/ComponentData/UpdateComponent/5
+        /// FORM DATA: Component JSON Object
+        /// </example>
+    
         [ResponseType(typeof(void))]
         [HttpPost]
         [Route("api/componentdata/updatecomponent/{id}")]
@@ -114,7 +164,19 @@ namespace PassionProject2024.Controllers
         }
 
 
-        // POST: api/ComponentData/DeleteComponent/5
+        /// <summary>
+        /// Deletes a component from the system by its ID.
+        /// </summary>
+        /// <param name="id">The primary key of the component</param>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// or
+        /// HEADER: 404 (NOT FOUND)
+        /// </returns>
+        /// <example>
+        /// POST: api/ComponentData/DeleteComponent/5
+        /// FORM DATA: (empty)
+        /// </example>
         [ResponseType(typeof(Component))]
         [HttpPost]
         [Route("api/componentdata/deletecomponent/{id}")]
